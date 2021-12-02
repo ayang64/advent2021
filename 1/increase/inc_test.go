@@ -2018,5 +2018,5 @@ func TestCount(t *testing.T) {
 5588
 5596`
 
-	t.Logf("%d", count(strings.NewReader(input)))
+	t.Logf("%d", count(read(strings.NewReader(input))))
 }

@@ -6,11 +6,11 @@ import (
 	"strconv"
 )
 
-func count(r io.Reader) int {
+func count(ch chan int) int {
 	first := true
 	prev := 0
 	c := 0
-	for v := range read(r) {
+	for v := range ch {
 		if first {
 			// don't bother trying to count
 			prev = v
