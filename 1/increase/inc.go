@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func agg(ch chan int, c int) chan int {
+func agg(ch <-chan int, c int) <-chan int {
 	ac := make(chan int)
 
 	go func() {
@@ -25,6 +25,7 @@ func agg(ch chan int, c int) chan int {
 			buf[c%cap(buf)] = v
 			c++
 			if c < 3 {
+				// we don't have a full buffer yet.
 				continue
 			}
 			ac <- sum(buf)
@@ -34,7 +35,7 @@ func agg(ch chan int, c int) chan int {
 	return ac
 }
 
-func count(ch chan int) int {
+func count(ch <-chan int) int {
 	first := true
 	prev := 0
 	c := 0
@@ -53,7 +54,7 @@ func count(ch chan int) int {
 	return c
 }
 
-func read(r io.Reader) chan int {
+func read(r io.Reader) <-chan int {
 	ch := make(chan int)
 
 	go func() {
