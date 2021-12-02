@@ -6,6 +6,34 @@ import (
 	"strconv"
 )
 
+func agg(ch chan int, c int) chan int {
+	ac := make(chan int)
+
+	go func() {
+		defer close(ac)
+		buf := make([]int, c, c)
+		c := 0
+		sum := func(n []int) int {
+			s := 0
+			for i := range n {
+				s += n[i]
+			}
+			return s
+		}
+
+		for v := range ch {
+			buf[c%cap(buf)] = v
+			c++
+			if c < 3 {
+				continue
+			}
+			ac <- sum(buf)
+		}
+	}()
+
+	return ac
+}
+
 func count(ch chan int) int {
 	first := true
 	prev := 0
